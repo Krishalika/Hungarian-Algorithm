@@ -1,0 +1,129 @@
+
+<html>
+    <head>
+        <title>
+            Sum Application
+        </title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#btnAdd').click(function () {
+                    var count = 1,
+                        first_row = $('#Row2');
+                        
+                    while (count-- > 0) first_row.clone().appendTo('#blacklistgrid');
+                });
+    
+                var myform = $('#myform'),
+                    iter = 1;
+                $('#btnAddCol').click(function () {
+                    myform.find('tr').each(function () {
+                        var trow = $(this);
+                        console.log(trow)
+                        if (trow.index() === 0) {
+                            trow.append('<td>T' + iter + '</td>');
+                        } else {
+                            trow.append('<td><input type="number" min="-1" name="cb' + iter + '"/></td>');
+                        }
+                    });
+                    iter += 1;
+                });
+            });
+        </script>
+    </head>
+    <body>
+    
+    <form name="myform" id="myform">
+        <table id="blacklistgrid">
+            <tr id="Row1">
+                <td class="space">&nbsp;</td>
+                <td>T0</td>
+            </tr>
+            <tr id="Row2">
+                <td>
+                    <input type="text" placeholder="task" name="task" required/>
+                </td>
+                <td>
+                    <input type="number" name="t0" min="-1"/>
+                </td>
+            </tr>
+        </table>
+        <button type="button" id="btnAdd">Add few more Rows!</button>
+        </br>
+        </br>
+        <button type="button" id="btnAddCol">Add new column</button>
+        </br>
+        </br>
+        <input type="submit" value="Clear"></input>
+    </form>
+    </body>
+    
+<button id='download-button'>Process</button>
+
+<script type="text/javascript" src="/eel.js"></script>
+<script type="text/javascript">
+
+        function htmlToCSV(html) {
+        var html = document.querySelector("table").outerHTML;
+    var data = [];
+   var rows = document.querySelectorAll("table tr");
+
+    for (var i = 0; i < rows.length; i++){
+      var row = [],
+        cols = rows[i].querySelectorAll("td, th");
+
+      for (var j = 0; j < cols.length; j++) {
+     
+        if (cols[j].querySelector('input') != null){
+            row.push(cols[j].querySelector('input').value);
+        }else{
+            row.push(cols[j].innerText); 
+        }
+      }
+      data.push(row.join(","));
+    }
+    alert(data.join('\r\n'))
+    return data.join('\n')
+  }
+    document
+      .getElementById("download-button")
+      .addEventListener("click", function () {
+        var html = document.querySelector("table").outerHTML;
+        htmlToCSV(html);
+      });function htmlToCSV(html) {
+        var html = document.querySelector("table").outerHTML;
+    var data = [];
+    var final = [];
+   var rows = document.querySelectorAll("table tr");
+
+    for (var i = 0; i < rows.length; i++){
+      var row = [],
+        cols = rows[i].querySelectorAll("td, th");
+
+      for (var j = 0; j < cols.length; j++) {
+     
+        if (cols[j].querySelector('input') != null){
+            row.push(cols[j].querySelector('input').value);
+        }else{
+            row.push(cols[j].innerText); //---original row
+        }
+      }
+      data.push(row.join(","));
+    }
+    return data.join('\n')
+
+  }
+    document
+      .getElementById("download-button")
+      .addEventListener("click", function () {
+        var html = document.querySelector("table").outerHTML;
+ 
+      eel.writeToCSV(htmlToCSV(html))
+
+      });
+
+    eel.start('table.html')
+
+  </script>
+
+</body>
